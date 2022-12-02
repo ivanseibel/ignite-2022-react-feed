@@ -1,35 +1,41 @@
+import { format, formatDistanceToNow } from 'date-fns';
+
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
+
 import styles from './Post.module.css';
 
-export function Post() {
+export function Post({ author, content, publishedAt }) {
+  const publishedDateFormatted = format(publishedAt, "LLLL do 'at' HH:mm'h'");
+  const publishedDateFromNow = formatDistanceToNow(publishedAt, {
+    addSuffix: true,
+  });
+
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
           <Avatar 
-            src="https://github.com/ivanseibel.png" 
+            src={author.avatarUrl} 
             alt="Author avatar"
           />
           <div className={styles.authorInfo}>
-            <strong>Ivan Seibel</strong>
-            <span>Web Developer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
-        <time title='First of December at 21:24' dateTime='2022-12-01 21:24'>Published 1h ago</time>
+        <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>{publishedDateFromNow}</time>
       </header>
       <div className={styles.content}>
-      <p>Hey guys 👋</p>
+        {content.map((line, index) => {
+          if (line.type === 'paragraph') {
+            return <p key={index}>{line.content}</p>
+          }
 
-      <p>I just uploaded another project to my portfolio. It's a project I did at NLW Return, a Rocketseat event. Project name is DoctorCare 🚀</p>
-
-      <p>👉{' '}<a href="#">jane.design/doctorcare</a></p>
-
-      <p>
-        <a href='#'>#newproject</a>{' '}
-        <a href='#'>#nlw</a>{' '}
-        <a href='#'>#rocketseat</a>
-      </p>
+          if (line.type === 'link') {
+            return <p key={index}><a href={line.href}>{line.content}</a></p>
+          }
+        })}
       </div>
 
       <form className={styles.commentForm}>
