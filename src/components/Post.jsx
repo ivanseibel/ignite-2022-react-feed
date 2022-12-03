@@ -14,6 +14,8 @@ export function Post({ author, content, publishedAt }) {
     addSuffix: true,
   });
 
+  const newCommentIsEmpty = newComment.trim() === '';
+
   function handleCreateNewComment(e) {
     createNewComment(e);
     e.target.postCommentButton.blur();
@@ -70,7 +72,13 @@ export function Post({ author, content, publishedAt }) {
         />
 
         <footer>
-          <button type='submit' name='postCommentButton'>Post</button>
+          <button 
+            type='submit'
+            name='postCommentButton'
+            disabled={newCommentIsEmpty}
+          >
+            Post
+          </button>
         </footer>
       </form>
 
