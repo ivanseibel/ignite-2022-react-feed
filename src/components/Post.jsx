@@ -7,12 +7,17 @@ import { Comment } from './Comment';
 import styles from './Post.module.css';
 
 export function Post({ author, content, publishedAt }) {
-  const { handleCreateNewComment, comments, newComment, setNewComment } = useCreateNewComment();
+  const { createNewComment, comments, newComment, setNewComment, deleteComment } = useCreateNewComment();
   
   const publishedDateFormatted = format(publishedAt, "LLLL do 'at' HH:mm'h'");
   const publishedDateFromNow = formatDistanceToNow(publishedAt, {
     addSuffix: true,
   });
+
+  function handleCreateNewComment(e) {
+    createNewComment(e);
+    e.target.postCommentButton.blur();
+  }
 
   return (
     <article className={styles.post}>
@@ -56,13 +61,18 @@ export function Post({ author, content, publishedAt }) {
         />
 
         <footer>
-          <button type='submit'>Post</button>
+          <button type='submit' name='postCommentButton'>Post</button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
         {comments.map((comment) => (
-          <Comment key={comment.id} content={comment.content} />
+          <Comment 
+            key={comment.id} 
+            content={comment.content} 
+            onDeleteComment={deleteComment} 
+            id={comment.id}
+          />
         ))}
       </div>
     </article>
