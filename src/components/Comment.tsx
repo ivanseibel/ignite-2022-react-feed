@@ -5,7 +5,13 @@ import { useApplaud } from '../hooks/useApplaud';
 
 import styles from './Comment.module.css';
 
-export function Comment({ id, content, onDeleteComment }) {
+interface CommentProps {
+  id: number;
+  content: string;
+  onDeleteComment: (id: number) => void;
+}
+
+export function Comment({ id, content, onDeleteComment }: CommentProps) {
   const { applauds, incrementApplaud } = useApplaud()
   
   function handleDeleteComment() {

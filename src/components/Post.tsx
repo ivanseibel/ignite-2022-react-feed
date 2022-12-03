@@ -1,4 +1,5 @@
 import { format, formatDistanceToNow } from 'date-fns';
+import { ChangeEvent, FormEvent, InvalidEvent } from 'react';
 import { useCreateNewComment } from '../hooks/useCreateNewComment';
 
 import { Avatar } from './Avatar';
@@ -6,7 +7,25 @@ import { Comment } from './Comment';
 
 import styles from './Post.module.css';
 
-export function Post({ author, content, publishedAt }) {
+interface Author {
+  name: string;
+  role: string;
+  avatarUrl: string;
+}
+
+interface Content {
+  type: 'paragraph' | 'link';
+  content: string;
+  href: string;
+}
+
+interface PostProps {
+  author: Author;
+  content: Content[];
+  publishedAt: Date;
+}
+
+export function Post({ author, content, publishedAt }: PostProps) {
   const { createNewComment, comments, newComment, setNewComment, deleteComment } = useCreateNewComment();
   
   const publishedDateFormatted = format(publishedAt, "LLLL do 'at' HH:mm'h'");
@@ -16,16 +35,18 @@ export function Post({ author, content, publishedAt }) {
 
   const newCommentIsEmpty = newComment.trim() === '';
 
-  function handleCreateNewComment(e) {
+  function handleCreateNewComment(e: FormEvent<HTMLFormElement>) {
     createNewComment(e);
-    e.target.postCommentButton.blur();
+    
+    const buttonElement = e.currentTarget.querySelector('button');
+    buttonElement?.blur();
   }
 
-  function handleOnInvalid(e) {
-    e.target.setCustomValidity('Please enter a comment');
+  function handleOnInvalid(e: InvalidEvent<HTMLTextAreaElement>) {
+    e.target.setCustomValidity('Please, write a comment');
   }
 
-  function handleChangeCommentContent(e) {
+  function handleChangeCommentContent(e: ChangeEvent<HTMLTextAreaElement>) {
     e.target.setCustomValidity('');
     setNewComment(e.target.value);
   }

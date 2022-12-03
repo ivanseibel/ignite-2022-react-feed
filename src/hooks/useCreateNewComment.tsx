@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+
+interface Comment {
+  id: number;
+  content: string;
+}
 
 export function useCreateNewComment() {
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
 
-  function createNewComment(e) {
+  function createNewComment(e: FormEvent) {
     e.preventDefault();
 
     setComments([...comments, {
@@ -15,7 +20,7 @@ export function useCreateNewComment() {
     setNewComment("");
   }
 
-  function deleteComment(id) {
+  function deleteComment(id: number) {
     setComments(comments.filter(comment => comment.id !== id));
   }
 
