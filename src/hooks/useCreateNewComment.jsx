@@ -4,7 +4,7 @@ export function useCreateNewComment() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
-  function handleCreateNewComment(e) {
+  function createNewComment(e) {
     e.preventDefault();
 
     setComments([...comments, {
@@ -15,5 +15,9 @@ export function useCreateNewComment() {
     setNewComment("");
   }
 
-  return { comments, handleCreateNewComment, newComment, setNewComment };
+  function deleteComment(id) {
+    setComments(comments.filter(comment => comment.id !== id));
+  }
+
+  return { comments, createNewComment, newComment, setNewComment, deleteComment };
 }
