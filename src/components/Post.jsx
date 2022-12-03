@@ -14,9 +14,20 @@ export function Post({ author, content, publishedAt }) {
     addSuffix: true,
   });
 
+  const newCommentIsEmpty = newComment.trim() === '';
+
   function handleCreateNewComment(e) {
     createNewComment(e);
     e.target.postCommentButton.blur();
+  }
+
+  function handleOnInvalid(e) {
+    e.target.setCustomValidity('Please enter a comment');
+  }
+
+  function handleChangeCommentContent(e) {
+    e.target.setCustomValidity('');
+    setNewComment(e.target.value);
   }
 
   return (
@@ -55,13 +66,19 @@ export function Post({ author, content, publishedAt }) {
         <textarea 
           placeholder='Your comment here'
           value={newComment}
-          onChange={(e) => {
-            setNewComment(e.target.value);
-          }}
+          onChange={handleChangeCommentContent}
+          required
+          onInvalid={handleOnInvalid}
         />
 
         <footer>
-          <button type='submit' name='postCommentButton'>Post</button>
+          <button 
+            type='submit'
+            name='postCommentButton'
+            disabled={newCommentIsEmpty}
+          >
+            Post
+          </button>
         </footer>
       </form>
 
