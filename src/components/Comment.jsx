@@ -1,12 +1,21 @@
 import { HandsClapping, ThumbsUp, Trash } from 'phosphor-react';
+
 import { Avatar } from './Avatar';
+import { useApplaud } from '../hooks/useApplaud';
+
 import styles from './Comment.module.css';
 
 export function Comment({ id, content, onDeleteComment }) {
+  const { applauds, incrementApplaud } = useApplaud()
+  
   function handleDeleteComment() {
     onDeleteComment(id);
   }
   
+  function handleApplaud() {
+    incrementApplaud();
+  }
+
   return (
     <div className={styles.comment}>
       <Avatar hasBorder={false} src="https://github.com/ivanseibel.png" alt="Comment author avatar" />
@@ -32,9 +41,9 @@ export function Comment({ id, content, onDeleteComment }) {
         </div>
 
         <footer>
-          <button>
+          <button onClick={handleApplaud}>
             <HandsClapping size={20} />
-            Applaud <span>18</span>
+            Applaud <span>{applauds}</span>
           </button>
         </footer>
       </div>
