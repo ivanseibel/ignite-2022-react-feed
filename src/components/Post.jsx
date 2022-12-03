@@ -19,6 +19,15 @@ export function Post({ author, content, publishedAt }) {
     e.target.postCommentButton.blur();
   }
 
+  function handleOnInvalid(e) {
+    e.target.setCustomValidity('Please enter a comment');
+  }
+
+  function handleChangeCommentContent(e) {
+    e.target.setCustomValidity('');
+    setNewComment(e.target.value);
+  }
+
   return (
     <article className={styles.post}>
       <header>
@@ -55,9 +64,9 @@ export function Post({ author, content, publishedAt }) {
         <textarea 
           placeholder='Your comment here'
           value={newComment}
-          onChange={(e) => {
-            setNewComment(e.target.value);
-          }}
+          onChange={handleChangeCommentContent}
+          required
+          onInvalid={handleOnInvalid}
         />
 
         <footer>
